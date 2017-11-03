@@ -16,6 +16,7 @@
 #include "net/url_request/redirect_info.h"
 
 namespace {
+const url::Origin invalid_origin(GURL(""));
 const int kBufferSize = 4096;
 }  // namespace
 
@@ -120,6 +121,7 @@ void AtomURLRequest::DoInitialize(
   request_->set_method(method);
   // Do not send cookies from the cookie store.
   DoSetLoadFlags(net::LOAD_DO_NOT_SEND_COOKIES);
+  request_->set_initiator(base::make_optional(invalid_origin));
 }
 
 void AtomURLRequest::DoTerminate() {

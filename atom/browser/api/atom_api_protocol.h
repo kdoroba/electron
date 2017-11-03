@@ -78,6 +78,11 @@ class Protocol : public mate::TrackableObject<Protocol> {
     net::URLRequestJob* MaybeCreateJob(
         net::URLRequest* request,
         net::NetworkDelegate* network_delegate) const override {
+      url::Origin org;
+      if (request->initiator().has_value() &&
+          !request->initiator()->GetURL().is_valid()) {
+        return nullptr;
+      }
       RequestJob* request_job = new RequestJob(request, network_delegate);
       request_job->SetHandlerInfo(isolate_, request_context_.get(), handler_);
       return request_job;
